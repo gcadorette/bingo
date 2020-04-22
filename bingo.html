@@ -1,0 +1,139 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Bingoo</title>
+
+</head>
+
+<body>
+  <style>
+  .bingo {
+	padding-left:35%;
+  }
+  
+  .text {
+	padding-left:35%;
+	padding-top:50%;
+	height: 60%;
+	background-color: #E490A8;
+	color: #FFFF00;
+  }
+  
+  .square {
+	  height: 100%;
+	  width: 17%;
+	  float: left;
+	  border-style: solid;
+  }
+  .toggled {
+	background-color: #B50ABA;
+	color: #008000;
+  }
+  .row {
+	width: 100%;
+	height: 20%;
+  }
+  .card {
+	height: 400px;
+	width: 400px;
+	float: left;
+	margin-right: 20px;
+	margin-bottom: 60px;
+  }
+  .header {
+	font-size: 2em;
+  }
+
+   </style>
+<div class="header">
+  <label>Nombre de cartes à générer:</label>
+  <input type="number" id="amtCards" min="1" max="10" value="1">
+  <input type="button" id="generationButton" value="Générer"/>
+</div>
+  <div id="cards" style="margin-top: 20px;"></div>
+  <script>
+  (function() {
+	document.getElementById("generationButton").onclick = function(e){
+		let amtToGenerate = parseInt(document.getElementById("amtCards").value);
+		document.getElementById("cards").innerHTML = "";
+		//button.disabled = "true";
+		for(let i = 0; i < amtToGenerate; i++)
+		{
+			generateBingo();
+		}
+    }
+	
+	function squareOnClick(e)
+	{
+		if(e.target.classList.contains("toggled"))
+		{
+			e.target.classList.remove("toggled");
+		}
+		else {
+			e.target.classList.add("toggled");
+		}
+	}
+	
+	function generateBingo()
+	{
+		const AMT_PER_COLUMN = 15;
+		let cardSpace = document.getElementById("cards");
+		let bingoCard = document.createElement("div");
+		bingoCard.classList.add("card");
+		cardSpace.appendChild(bingoCard);
+		const BINGO_SIZE = 5;
+		let generatedNums = [];
+		let middle = Math.floor((BINGO_SIZE/2));
+		let BINGO = "BINGO";
+		let bingoRow = document.createElement("div");
+		bingoCard.appendChild(bingoRow);
+		
+		for(let i = 0; i < BINGO.length; i++)
+		{
+			let square = document.createElement("div");
+			square.classList.add("square");
+			bingoRow.appendChild(square);
+			let text = document.createElement("div");
+			text.classList.add("bingo");
+			text.innerHTML = BINGO.charAt(i);
+			square.appendChild(text);
+
+		}
+		for(let i = 0; i < BINGO_SIZE; i++)
+		{
+			let row = document.createElement("div");
+			row.classList.add("row");
+			bingoCard.appendChild(row);
+			for(let j = 0; j < BINGO_SIZE; j++)
+			{
+				let square = document.createElement("div");
+				square.classList.add("square");
+				square.addEventListener("click", squareOnClick, false); //where func is your function name
+				row.appendChild(square);
+				
+				let text = document.createElement("div");
+				text.classList.add("text");
+				square.appendChild(text);
+				if(i === middle && j === middle)
+				{
+					text.innerHTML = "FREE";
+					text.style = "padding-left:17%;";
+				}
+				else {
+					let generatedNumber = -1;
+					do {
+						generatedNumber = Math.floor(Math.random() * AMT_PER_COLUMN) + (j * AMT_PER_COLUMN) + 1;
+					} while(generatedNums.includes(generatedNumber));
+					generatedNums.push(generatedNumber);
+					text.innerHTML = generatedNumber;
+				}
+			}
+		}
+	}
+  })();
+  </script>
+</body>
+</html>

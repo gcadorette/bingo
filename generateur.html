@@ -1,0 +1,65 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>Allo !</title>
+
+</head>
+
+<body>
+	<button id="generer">Nouvelle boule</button>
+	<h1 id="chiffre"></h1>
+	<h2>Boules déjà pigées:</h2>
+	<h3 id="B"></h2>
+	<h3 id="I"></h2>
+	<h3 id="N"></h2>
+	<h3 id="G"></h2>
+	<h3 id="O"></h2>
+
+	<button id="reset"> Recommencer la partie </button>
+	<script>
+		(function() {
+			let dejapige = [];
+			document.getElementById("generer").onclick = function(e){
+				const MAX_PER_COLUMN = 15;
+				const AMT_OF_COLUMN = 5;
+				if(dejapige.length == (AMT_OF_COLUMN * MAX_PER_COLUMN) - 1)
+				{
+					document.getElementById("chiffre").innerHTML = "Nous avons généré toutes les boules possibles !"
+					return;
+				}
+				const BINGO = "BINGO";
+				let value = -1;
+				let letter = "A";
+				let val = ""
+				do{
+					value = Math.floor(1 + Math.random() * (-1 + MAX_PER_COLUMN * AMT_OF_COLUMN));
+					letter = BINGO.charAt(Math.floor((value - 1)/MAX_PER_COLUMN));
+					val = letter + value.toString();
+				} while(dejapige.includes(val))
+				dejapige.push(val);
+				resetBINGO();
+				for(let i = 0; i < dejapige.length; i++)
+				{
+					document.getElementById(dejapige[i].charAt(0)).innerHTML += " " + dejapige[i];
+				}
+				document.getElementById("chiffre").innerHTML = val;
+			}
+			document.getElementById("reset").onclick = function(e){
+				document.getElementById("chiffre").innerHTML = "";
+				resetBINGO();
+				dejapige = [];
+			}
+			
+			function resetBINGO()
+			{
+				document.getElementById("B").innerHTML = "";
+				document.getElementById("I").innerHTML = "";
+				document.getElementById("N").innerHTML = "";
+				document.getElementById("G").innerHTML = "";
+				document.getElementById("O").innerHTML = "";
+			}
+
+		})();
+	</script>
+</body>
